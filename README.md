@@ -1,151 +1,120 @@
-# MySQL and SQLite projects with Flask
+MySQL and SQLite Projects with Flask
+<p align="center"> <img src="https://user-images.githubusercontent.com/54184905/109134183-d3e06480-7766-11eb-83b7-f3d44c53ebbd.png" /> </p>
+Overview
+This repository demonstrates how to build web applications using Flask, with integrations for both MySQL and SQLite databases. Each project showcases a different database management system, focusing on specific use cases: a blog application using MySQL and a to-do application using SQLite.
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/54184905/109134183-d3e06480-7766-11eb-83b7-f3d44c53ebbd.png" />
-</p>
+Technologies Used
+Flask: A lightweight, micro web framework for Python.
+MySQL: A relational database management system for the blog application.
+SQLite: An embedded relational database used in the to-do app.
+SQLAlchemy: ORM (Object-Relational Mapping) tool used in the SQLite project to interact with the database through Python objects.
+Projects
+1. demir.ai Blog with MySQL
+This project is a simple blog where users can:
 
-**Flask:** Flask is a micro web framework written in Python. It is classified as a 
-microframework because it does not require particular tools or libraries. It has no 
-database abstraction layer, form validation, or any other components where 
-pre-existing third-party libraries provide common functions. However, Flask supports 
-extensions that can add application features as if they were implemented in Flask 
-itself. Extensions exist for object-relational mappers, form validation, upload 
-handling, various open authentication technologies and several common framework 
-related tools.
+Register and log in.
+Read and write articles.
+Database Structure:
 
-Applications that use the Flask framework include Pinterest and LinkedIn.
+Users Table: Stores user information such as name, email, username, and password.
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/54184905/109134181-d3e06480-7766-11eb-97e8-61ffa4ca040a.png" />
-</p>
-
-**MySQL:** MySQL is an open-source relational database management system (RDBMS). Its 
-name is a combination of "My", the name of co-founder Michael Widenius's daughter, and
-"SQL", the abbreviation for Structured Query Language. A relational database organizes
-data into one or more data tables in which data types may be related to each other; 
-these relations help structure the data. SQL is a language programmers use to create, 
-modify and extract data from the relational database, as well as control user access 
-to the database. In addition to relational databases and SQL, an RDBMS like MySQL 
-works with an operating system to implement a relational database in a computer's 
-storage system, manages users, allows for network access and facilitates testing 
-database integrity and creation of backups. 
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/54184905/109134179-d2af3780-7766-11eb-9b9c-5169fdcea403.png" />
-</p>
-
-**SQLite:** SQLite is a relational database management system (RDBMS) contained in a C
-library. In contrast to many other database management systems, SQLite is not a client–server database engine. Rather, it is embedded into the end program.
-
-SQLite is ACID-compliant and implements most of the SQL standard, generally following 
-PostgreSQL syntax. However, SQLite uses a dynamically and weakly typed SQL syntax that does not guarantee the domain integrity. This means that one can, for example, insert a string into a column defined as an integer. SQLite will attempt to convert data 
-between formats where appropriate, the string "123" into an integer in this case, but 
-does not guarantee such conversions and will store the data as-is if such a conversion
-is not possible.
-
-
-## Projects
-
-### [**demir.ai blog with MSQL**](/demiraiBlog/)
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/54184905/109133486-1d7c7f80-7766-11eb-96ba-dc8d81b2f1f4.png" />
-</p>
-
-In this application, the user can register and log in to the form, I have stored user transactions in the table named "users".
-
-~~~~sql
-create table users(
-   id INT NOT NULL AUTO_INCREMENT,
-   name TEXT NOT NULL,
-   email TEXT NOT NULL,
-   username TEXT NOT NULL,
-   password TEXT NOT NULL,
-   PRIMARY KEY ( id )
+sql
+Copy code
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    PRIMARY KEY (id)
 );
-~~~~
+Articles Table: Stores articles with fields for title, author, content, and creation date.
 
-Users can read articles on this blog, if they wish, they can write their own articles after logging in. I have stored the data about the articles in the table named "articles".
-
-~~~~sql
-create table articles(
-   id INT NOT NULL AUTO_INCREMENT,
-   title TEXT NOT NULL,
-   author TEXT NOT NULL,
-   content TEXT NOT NULL,
-   created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-   PRIMARY KEY ( id )
+sql
+Copy code
+CREATE TABLE articles (
+    id INT NOT NULL AUTO_INCREMENT,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );
-~~~~
+Flask Configuration:
 
-This application was written in Python-Flask and both the database and the site were deployed on [pythonanywhere](https://www.pythonanywhere.com/).
+The Flask application is configured to connect to a MySQL database hosted on pythonanywhere. Here's a basic snippet of how the MySQL configuration is set up:
 
-Flask database configuration.
-
-```python
-# Flask uygulamamız
+python
+Copy code
 app = Flask(__name__)
-
-# mysql configarsyonu
-app.secret_key= "demirai"
 app.config["MYSQL_HOST"] = "demirai.mysql.pythonanywhere-services.com"
 app.config["MYSQL_USER"] = "demirai"
 app.config["MYSQL_PASSWORD"] = "****"
 app.config["MYSQL_DB"] = "demirai$demirai"
-
-# verilerimiz sozluk seklinde gelecek
 app.config["MYSQL_CURSORCLASS"] = "DictCursor"
-
-""" 
-[
-{"id":1, "title":"Deneme"},
-{"id":2, "title":"Deneme2"}
-]
-
-"""
-
-# mysql db, flask ile iletişimde.
 mysql = MySQL(app)
-```
+2. Todo App with SQLite
+The to-do app allows users to:
 
-Deployed version of this application (This site will be disabled on Sunday 23 May 2021): [Link](http://demirai.pythonanywhere.com/)
+Add, update, and delete tasks.
+Mark tasks as complete.
+ORM and SQLite Integration:
 
-### [**Todo app with SQLite**](/FlaskTodoApp/)
+In this application, the database operations are handled via SQLAlchemy, which abstracts SQL queries into Python objects.
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/54184905/109133489-1eadac80-7766-11eb-805e-e2c0958f2a06.png" />
-</p>
-
-With this application, you can follow what you need to do regularly. You can add your tasks to the list and mark them when you do, or you can delete these tasks if you wish.
-
-In this application, we created an ORM (Object Relational Mapping) database by combining SQLite and SQLAlchemy, so we performed operations on the objects we created without the need for SQL queries.
-
-```python
-# db ye Toodo adinda bir tablo eklemek icin class olusturduk.
+Tasks Table: This table stores tasks, including their titles and completion status.
+python
+Copy code
 class Todo(db.Model):
-
-    # tabloya id adinda sutun ekliyoruz.
     id = db.Column(db.Integer, primary_key=True)
-
-    # tabloya title adinda sutun ekliyoruz.
     title = db.Column(db.String(80))
-
-    # tabloya complate adinda sutun ekliyoruz.
     complete = db.Column(db.Boolean)
-```
+Flask Configuration:
 
-Flask database configuration.
+The application is configured to connect to a local SQLite database.
 
-
-```python
-app = Flask(__name__)
-
-# sqlite db konumu
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////mnt/EE6A1EE26A1EA6FD/Python/Flask_Todo_App/todo.db'
-
-# SQLAlchemy ile db baglantisi
-# Artik ORM db (Nesne-İlişkisel Eşleme)
+python
+Copy code
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 db = SQLAlchemy(app)
-```
+Installation
+Prerequisites
+Python 3.x
+MySQL (for the blog project)
+SQLite (for the to-do project)
+Flask and SQLAlchemy
+Steps
+Clone the repository:
 
+bash
+Copy code
+git clone https://github.com/Charan-Cherry7/Python-Sql-1.git
+Install the required dependencies:
 
+bash
+Copy code
+pip install -r requirements.txt
+Set up the MySQL database for the blog application by running the SQL queries in demiraiBlog/schema.sql.
+
+For the to-do app, SQLite will automatically create the database when you run the application.
+
+Usage
+For MySQL (demir.ai blog):
+
+Configure the database connection in the config.py or directly in the app as shown above.
+Start the Flask server:
+bash
+Copy code
+python demiraiBlog/app.py
+Access the app in your browser at http://localhost:5000.
+For SQLite (Todo app):
+
+Run the following command to start the server:
+bash
+Copy code
+python FlaskTodoApp/app.py
+The to-do application will be accessible at http://localhost:5000.
+Project Screenshots
+<p align="center"> <img src="https://user-images.githubusercontent.com/54184905/109134181-d3e06480-7766-11eb-97e8-61ffa4ca040a.png" /> </p>
+Contributing
+Feel free to contribute to this project by creating issues or submitting pull requests. Contributions to add more features or improve existing ones are welcome!
