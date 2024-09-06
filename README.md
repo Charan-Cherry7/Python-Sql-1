@@ -148,5 +148,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////mnt/EE6A1EE26A1EA6FD/Python/
 db = SQLAlchemy(app)
 ```
 
-Deployed version of this application (This site will be disabled on Sunday 23 May 2021): [Link](http://todoapp.pythonanywhere.com/)
 
